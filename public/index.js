@@ -165,8 +165,22 @@ function rentalPrice(car, days, distance){
 function ComputeTimeComp(rental){
   var pickupDate = new Date(rental.pickupDate);
   var returnDate = new Date(rental.returnDate);
-  var nbDays = (returnDate - pickupDate) / (1000*60*60*24) + 1;
-  return nbDays * cars.find(x => x.id == rental.carId).pricePerDay;
+  var nbDays = (returnDate - pickupDate) / (1000 * 60 * 60 * 24) + 1;
+   
+    if (nbDays > 1 && nbDays <= 4)
+    {
+        return (nbDays * cars.find(x => x.id == rental.carId).pricePerDay)*0.9;
+    }
+    if (nbDays > 4 && nbDays <= 10)
+    {
+        return (nbDays * cars.find(x => x.id == rental.carId).pricePerDay)*0.7;
+    }
+    if (nbDays > 10)
+    {
+        return (nbDays * cars.find(x => x.id == rental.carId).pricePerDay)*0.5;
+    }
+    else
+        return nbDays * cars.find(x => x.id == rental.carId).pricePerDay;
 };
 
 function ComputeDistComp(rental){
