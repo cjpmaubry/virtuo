@@ -170,11 +170,11 @@ function ComputeTimeComp(rental){
   return nbDays * cars.find(x => x.id == rental.carId).pricePerDay;
 };
 
-function computeDistComp(rental){
+function ComputeDistComp(rental){
   return rental.distance * cars.find(x => x.id === rental.carId).parsePerKm;
 }
 
-rentals.forEach(function(part, index){this[index].price=computeTimeComp(part)+ computeDistComp(part);
+rentals.forEach(function(part, index){this[index].price=ComputeTimeComp(part)+ ComputeDistComp(part);
 },rentals);
 
 
