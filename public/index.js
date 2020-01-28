@@ -177,17 +177,28 @@ function ComputeTimeComp(rental){
     }
     if (nbDays > 10)
     {
-        return (nbDays * cars.find(x => x.id == rental.carId).pricePerDay)*0.5;
+        return (nbDays * cars.find(x => x.id == rental.carId).pricePerDay) * 0.5;
     }
     else
         return nbDays * cars.find(x => x.id == rental.carId).pricePerDay;
 };
 
+function ReturnDay(rental){
+    var pickupDate = new Date(rental.pickupDate);
+    var returnDate = new Date(rental.returnDate);
+    var nbDays = (returnDate - pickupDate) / (1000 * 60 * 60 * 24) + 1;
+    return nbDays
+}
+
 function ComputeDistComp(rental){
   return rental.distance * cars.find(x => x.id === rental.carId).pricePerKm;
 }
 
-rentals.forEach(function(part, index){this[index].price=ComputeTimeComp(part)+ ComputeDistComp(part);
+rentals.forEach(function (part, index) {
+    this[index].price = ComputeTimeComp(part) + ComputeDistComp(part);
+    this[index].commission.insurance = this[index].price*0.3*0.5;
+    this[index].commission.treasury = ReturnDay(part);
+    this[index].commission.virtuo = this[index].price * 0.3 * 0.5 - this[index].commission.treasury;
 },rentals);
 
 
