@@ -166,7 +166,7 @@ function ComputeTimeComp(rental){
   var pickupDate = new Date(rental.pickupDate);
   var returnDate = new Date(rental.returnDate);
   var nbDays = (returnDate - pickupDate) / (1000*60*60*24) + 1;
-  Console.log(nbDays)
+  console.log(nbDays)
   return nbDays * cars.find(x => x.id == rental.carId).pricePerDay;
 };
 
