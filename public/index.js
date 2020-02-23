@@ -183,6 +183,10 @@ function ComputeTimeComp(rental){
         return nbDays * cars.find(x => x.id == rental.carId).pricePerDay;
 };
 
+function ComputePrice(actors) {
+    return (rentals.find(x => x.id == actors.rentalId).price);
+}
+
 function ReturnDay(rental){
     var pickupDate = new Date(rental.pickupDate);
     var returnDate = new Date(rental.returnDate);
@@ -203,13 +207,37 @@ function DeductibleReduction(rental) {
     }
 }
 
+function ComputePrice(actors) {
+    return (rentals.find(x => x.id == actors.rentalId).price);
+}
+
+function ComputeVirtuo(actors) {
+    return (rentals.find(x => x.id == actors.rentalId).commission.virtuo);
+}
+
+function ComputeTreasury(actors) {
+    return (rentals.find(x => x.id == actors.rentalId).commission.treasury);
+}
+
+function ComputeInsurance(actors) {
+    return (rentals.find(x => x.id == actors.rentalId).commission.insurance);
+}
+
+
 rentals.forEach(function (part, index) {
     this[index].price = ComputeTimeComp(part) + ComputeDistComp(part) + DeductibleReduction(part) * ReturnDay(part);
     this[index].commission.insurance = (this[index].price -DeductibleReduction(part) * ReturnDay(part))*0.3*0.5;
     this[index].commission.treasury = ReturnDay(part);
-    this[index].commission.virtuo = (this[index].price - DeductibleReduction(part) * ReturnDay(part))* 0.3 * 0.5 - this[index].commission.treasury;
+    this[index].commission.virtuo = (this[index].price - DeductibleReduction(part) * ReturnDay(part)) * 0.3 * 0.5 - this[index].commission.treasury + DeductibleReduction(part) * ReturnDay(part);
 },rentals);
 
+actors.forEach(function (part, index) {
+    this[index].payment[0].amount = ComputePrice(part);
+    this[index].payment[2].amount = ComputeInsurance(part);
+    this[index].payment[3].amount= ComputeTreasury(part);
+    this[index].payment[4].amount = ComputeVirtuo(part);
+    this[index].payment[1].amount = this[index].payment[0].amount - this[index].payment[2].amount - this[index].payment[3].amount - this[index].payment[4].amount;
+}, actors);
 
 
 
