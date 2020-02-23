@@ -194,8 +194,17 @@ function ComputeDistComp(rental){
   return rental.distance * cars.find(x => x.id === rental.carId).pricePerKm;
 }
 
+function DeductibleReduction(rental) {
+    if (rental.options.deductibleReduction == true) {
+        return 4
+    }
+    else {
+        return 0
+    }
+}
+
 rentals.forEach(function (part, index) {
-    this[index].price = ComputeTimeComp(part) + ComputeDistComp(part);
+    this[index].price = ComputeTimeComp(part) + ComputeDistComp(part) + DeductibleReduction(part)*ReturnDay(part);
     this[index].commission.insurance = this[index].price*0.3*0.5;
     this[index].commission.treasury = ReturnDay(part);
     this[index].commission.virtuo = this[index].price * 0.3 * 0.5 - this[index].commission.treasury;
