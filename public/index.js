@@ -204,11 +204,15 @@ function DeductibleReduction(rental) {
 }
 
 rentals.forEach(function (part, index) {
-    this[index].price = ComputeTimeComp(part) + ComputeDistComp(part) + DeductibleReduction(part)*ReturnDay(part);
-    this[index].commission.insurance = this[index].price*0.3*0.5;
+    this[index].price = ComputeTimeComp(part) + ComputeDistComp(part) + DeductibleReduction(part) * ReturnDay(part);
+    this[index].commission.insurance = (this[index].price -DeductibleReduction(part) * ReturnDay(part))*0.3*0.5;
     this[index].commission.treasury = ReturnDay(part);
-    this[index].commission.virtuo = this[index].price * 0.3 * 0.5 - this[index].commission.treasury;
+    this[index].commission.virtuo = (this[index].price - DeductibleReduction(part) * ReturnDay(part))* 0.3 * 0.5 - this[index].commission.treasury;
 },rentals);
+
+
+
+
 
 
 console.log(cars);
